@@ -43,8 +43,8 @@ final class MappingHandler implements MessageHandler
     /**
      * {@inheritdoc}
      */
-    public function handle(Message $message)
+    public function handle(Message $message, array $options=[])
     {
-        return call_user_func($this->resolver->handlerFor($message), $message);
+        return call_user_func($this->resolver->handlerFor($message), $message, $options);
     }
 }

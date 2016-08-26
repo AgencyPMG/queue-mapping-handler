@@ -36,6 +36,23 @@ class MappingHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->message, $calledWith);
     }
 
+    public function testHandlerInvokesCallbackFromResolveWithProvidedOptions()
+    {
+        $calledWith = null;
+        $this->resolver->expects($this->once())
+            ->method('handlerFor')
+            ->with($this->message)
+            ->willReturn(function ($msg, $options) use (&$calledWith) {
+                $calledWith = $options;
+                return true;
+            });
+
+        $result = $this->handler->handle($this->message, ['one' => true]);
+
+        $this->assertTrue($result);
+        $this->assertSame(['one' => true], $calledWith);
+    }
+
     protected function setUp()
     {
         $this->resolver = $this->createMock(HandlerResolver::class);
